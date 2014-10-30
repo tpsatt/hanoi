@@ -1,0 +1,41 @@
+body {
+    width:100%;
+    height:100%:
+}
+
+#hanoiContainer {
+    height:50%;
+    width:95%;
+    background-color:#FBFBEF;
+    padding:1em;
+    border-radius:15px;
+    position:relative;
+}
+
+.peg {
+    width:33%;
+    height:100%;
+}
+
+#discInput {
+    width:2em;
+}
+
+.ring {
+    display:inline-block;
+    border-radius:10px;
+}
+
+.outerRing {
+    width:33%;
+    display:block;
+    text-align:center;
+    margin:0px;
+    position:absolute;
+    transition:all 0.25s ease-in-out 0s;
+    transition:all 0.25s ease-in-out 0s;
+}
+
+.moving {
+    z-index:10;
+}

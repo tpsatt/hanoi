@@ -1,0 +1,87 @@
+<html>
+    <head>
+        <title>Hanoi</title>
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="http://code.jquery.com/qunit/qunit-1.15.0.js"></script>
+        <script src="hanoi.js"></script>
+        <link rel="stylesheet" type="text/css" href="hanoi-style.css">
+        <script type="text/javascript">
+            function initializeScreen(e) {
+                e.preventDefault();
+                $(".peg").empty();
+                var numOfDiscs = $('#discInput').val();
+                var height = 100/numOfDiscs;
+                $("#peg0").empty();
+                var width;
+                var color;
+                var spanDec;
+                for (var i=1;i<=numOfDiscs;i++) {
+                    color = i/numOfDiscs*360;
+                    width = i*75/numOfDiscs;
+                    var outer = document.createElement('span');
+                    $(outer).addClass('outerRing')
+                            .css("left",0)
+                            .css("height",height.toString()+"%")
+                            .css("top", (height*(i-1)).toString()+"%")
+                            .appendTo($("#peg0"));
+                    var ring = document.createElement('span');
+                    $(ring).addClass('ring')
+                           .css("width", width.toString()+"%")
+                           .css("background-color", "hsl("+color.toString()+",100%,55%)")
+                           .css("height","100%")
+                           .appendTo($(outer));
+                }
+                run();
+            }
+            function getTower(numOfDiscs) {
+                var tower = [[],[],[]];
+                for (var i=1;i<=numOfDiscs;i++) {
+                    tower[0].push(i);
+                }
+                return tower;
+            }
+            function run() {
+                var numOfDiscs = $('#discInput').val();
+                var height = 100/numOfDiscs;
+                var tower = getTower(numOfDiscs);
+                var moves = hanoi(tower,numOfDiscs,0,2);
+                function stepMove(currentMove) {
+                    var sPeg = "#peg" + currentMove[0].toString();
+                    var disc = $(sPeg + " .outerRing").first();
+                    var fPeg = "#peg" + currentMove[1].toString();
+                    $(fPeg).prepend($(disc));
+                    disc.css("left");
+                    disc.css("z-index",10);
+                     disc.css("left",33*currentMove[1].toString()+"%")
+                         .css("top",(100-($(fPeg + " .outerRing").length*height)).toString()+"%");
+                    disc.css("left");
+                    disc.css("z-index",0);
+                }
+                function applyAllMoves(moves) {
+                    if (moves.length > 0) {
+                        stepMove(moves.shift());
+                        window.setTimeout(function () { applyAllMoves(moves) },500);
+                    }
+                }
+                applyAllMoves(moves);
+            }
+            $(document).ready(function () {
+                $( "#submit" ).on("click", initializeScreen);
+            });
+        </script>
+    </head>
+    <body>
+        <form>
+            Number of discs to start: <input type="text" name="discNum" id="discInput">
+            <input type="submit" value="Run" id="submit">
+        </form>
+        <div id="hanoiContainer">
+            <div class="peg" id="peg0">
+            </div>
+            <div class="peg" id="peg1">
+            </div>
+            <div class="peg" id="peg2">
+            </div>
+        </div>
+    </body>
+</html>
